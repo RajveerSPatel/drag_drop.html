@@ -1,22 +1,122 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Lesson Library</title>
-    </head>
-    
+<head>
+  <meta charset="UTF-8">
+  <title>Lesson Library</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .topbar h1 {
+      margin: 0;
+    }
+
+    #search {
+      padding: 7px 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+      width: 220px;
+    }
+
+    #search:focus {
+      outline: none;
+      border-color: #3b5bdb;
+    }
+
+    #filter-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    #lesson-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .lesson-card {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 16px;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+    }
+
+    .lesson-card:hover {
+      border-color: #3b5bdb;
+      background: #fafbff;
+    }
+
+    .card-left {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .card-meta {
+      font-size: 12px;
+      color: #888;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .card-description {
+      font-size: 13px;
+      color: #555;
+      margin-top: 6px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    #lesson-count {
+      font-size: 13px;
+      color: #888;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
 <body>
 
-    <h1>Lesson Library</h1>
-    <input type="text" id="search" placeholder="Search lessons">
-    <div id="lesson-list">
-        <div class="lesson-card" draggable="true">
-            <h3>English</h3>
-            <p>In this lesson, students will listen to a shared story and use guided discussion to distinguish the main idea from supporting details, culminating in a class created summary of the text</p>
-        </div>
-    </div>
-    <a href="lesson-creator.html">Create New Lesson</a>
-    <a href="calender.html">Go to Calender</a>
+  <a class="back-link" href="calendar.html">← Back to calendar</a>
 
+  <div class="topbar">
+    <h1>Lesson library</h1>
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+      <input type="text" id="search" placeholder="Search lessons..." oninput="renderLibrary()">
+      <a class="btn-primary" href="lesson-creator.html">+ New lesson</a>
+    </div>
+  </div>
+
+  <div id="filter-row"></div>
+
+  <div id="lesson-count"></div>
+  <div id="lesson-list"></div>
+
+  <script src="lesson-library.js"></script>
 </body>
 </html>

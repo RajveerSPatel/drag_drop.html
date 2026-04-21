@@ -1,0 +1,242 @@
+/* main styles for the whole app */
+
+body {
+  font-family: sans-serif;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+h1 {
+  margin-bottom: 4px;
+}
+
+h2 {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+/* links */
+a {
+  color: #3b5bdb;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.back-link {
+  font-size: 14px;
+  display: inline-block;
+  margin-bottom: 16px;
+}
+
+.page-links {
+  margin-top: 20px;
+  display: flex;
+  gap: 16px;
+}
+
+/* buttons */
+.btn {
+  padding: 6px 14px;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #fff;
+  font-size: 14px;
+}
+
+.btn:hover {
+  background: #f0f0f0;
+}
+
+.btn.active {
+  background: #3b5bdb;
+  color: #fff;
+  border-color: #3b5bdb;
+}
+
+.btn-primary {
+  padding: 8px 16px;
+  background: #3b5bdb;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn-primary:hover {
+  background: #2f4ac7;
+  text-decoration: none;
+}
+
+.btn-secondary {
+  padding: 8px 16px;
+  background: #fff;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.btn-secondary:hover {
+  background: #f5f5f5;
+}
+
+.btn-edit {
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 12px;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  background: #fff;
+}
+
+.btn-edit:hover {
+  border-color: #3b5bdb;
+  color: #3b5bdb;
+}
+
+.btn-delete {
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 12px;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  background: #fff;
+}
+
+.btn-delete:hover {
+  border-color: #e03131;
+  color: #e03131;
+}
+
+.btn-remove {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #aaa;
+  font-size: 18px;
+  line-height: 1;
+  padding: 0 4px;
+  flex-shrink: 0;
+}
+
+.btn-remove:hover {
+  color: #e03131;
+}
+
+/* form stuff */
+input[type="text"],
+input[type="number"],
+select,
+textarea {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: #3b5bdb;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 90px;
+}
+
+label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.hint {
+  font-size: 12px;
+  color: #aaa;
+  margin-top: 4px;
+}
+
+.subtitle {
+  color: #888;
+  font-size: 14px;
+  margin-bottom: 24px;
+}
+
+input.error,
+textarea.error {
+  border-color: #e03131;
+}
+
+.error-msg {
+  font-size: 12px;
+  color: #e03131;
+  margin-top: 4px;
+}
+
+.empty-msg {
+  color: #aaa;
+  font-size: 14px;
+  font-style: italic;
+  padding: 8px 0;
+}
+
+/* subject tags */
+.subject-tag {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-size: 11px;
+  background: #eef0ff;
+  color: #3b5bdb;
+}
+
+/* filter pills */
+.filter-pill {
+  padding: 4px 12px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  font-size: 12px;
+  cursor: pointer;
+  background: #fff;
+}
+
+.filter-pill:hover {
+  border-color: #3b5bdb;
+  color: #3b5bdb;
+}
+
+.filter-pill.active {
+  background: #3b5bdb;
+  color: #fff;
+  border-color: #3b5bdb;
+}
+
+/* toast notification */
+#toast {
+  display: none;
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: #2f9e44;
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  z-index: 999;
+}

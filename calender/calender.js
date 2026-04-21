@@ -1,105 +1,237 @@
-// Get elements
+// grab stuff from the page
 const calendarGrid = document.getElementById("calendar-grid");
 const yearGrid = document.getElementById("year-grid");
-const monthTitle = document.getElementById("month-title");
+const weekdayRow = document.getElementById("weekday-row");
+const navTitle = document.getElementById("nav-title");
 
-// Selected month/year
-let selYear = 2026;
-let selMonth = 2; // 0 = Jan
+// start on todays month
+const today = new Date();
+let currentYear = today.getFullYear();
+let currentMonth = today.getMonth();
+let activeView = "month";
 
-// Month view generator
-function genCalendar(year, month) {
-  calendarGrid.innerHTML = "";
+// helper to make numbers like 3 -> "03"
+function pad(num) {
+  return num.toString().padStart(2, "0");
+}
 
-  const date = new Date(year, month);
-  const monthName = date.toLocaleString("default", { month: "long" });
+// make a date string like "2026-04-07"
+function makeDateString(year, month, day) {
+  return year + "-" + pad(month + 1) + "-" + pad(day);
+}
 
-  monthTitle.textContent = `${monthName} ${year}`;
+// check if a date is today
+function isToday(year, month, day) {
+  return year === today.getFullYear() &&
+         month === today.getMonth() &&
+         day === today.getDate();
+}
 
-  const firstWeekday = new Date(year, month, 1).getDay();
-  const totalDaysInMonth = new Date(year, month + 1, 0).getDate();
-
-  // Add blank cells before day 1
-  for (let i = 0; i < firstWeekday; i++) {
-    const emptyCell = document.createElement("div");
-    emptyCell.className = "day-cell empty";
-    calendarGrid.appendChild(emptyCell);
-  }
-
-  // Add actual days
-  for (let dayNumber = 1; dayNumber <= totalDaysInMonth; dayNumber++) {
-    const dayCell = document.createElement("div");
-    dayCell.className = "day-cell";
-    dayCell.textContent = dayNumber;
-    calendarGrid.appendChild(dayCell);
+// read from localStorage safely
+function getJSON(key) {
+  try {
+    return JSON.parse(localStorage.getItem(key)) || {};
+  } catch (e) {
+    return {};
   }
 }
 
-// Year view generator
-function genYear(year) {
+function getArray(key) {
+  try {
+    return JSON.parse(localStorage.getItem(key)) || [];
+  } catch (e) {
+    return [];
+  }
+}
+
+// MONTH VIEW
+function renderMonth(year, month) {
+  calendarGrid.innerHTML = "";
+  weekdayRow.style.display = "grid";
+
+  const monthName = new Date(year, month).toLocaleString("default", { month: "long" });
+  navTitle.textContent = monthName + " " + year;
+
+  const schedule = getJSON("schedule");
+  const lessons = getArray("lessons");
+
+  const firstDay = new Date(year, month, 1).getDay();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+  // blank squares before day 1
+  for (let i = 0; i < firstDay; i++) {
+    const blank = document.createElement("div");
+    blank.className = "day-cell empty";
+    calendarGrid.appendChild(blank);
+  }
+
+  // actual days
+  for (let day = 1; day <= daysInMonth; day++) {
+    const dateStr = makeDateString(year, month, day);
+    const cell = document.createElement("div");
+    cell.className = "day-cell";
+
+    if (isToday(year, month, day)) {
+      cell.classList.add("today");
+    }
+
+    cell.onclick = function() {
+      window.location.href = "day-view.html?date=" + dateStr;
+    };
+
+    // day number
+    const numEl = document.createElement("div");
+    numEl.className = "day-num";
+    numEl.textContent = day;
+    cell.appendChild(numEl);
+
+    // lesson dots
+    const lessonIds = (schedule[dateStr] || []).map(String);
+    const showMax = 3;
+
+    for (let i = 0; i < Math.min(lessonIds.length, showMax); i++) {
+      const lesson = lessons.find(function(l) {
+        return String(l.id) === lessonIds[i];
+      });
+      if (lesson) {
+        const dot = document.createElement("div");
+        dot.className = "lesson-dot";
+        dot.textContent = lesson.title;
+        cell.appendChild(dot);
+      }
+    }
+
+    if (lessonIds.length > showMax) {
+      const more = document.createElement("div");
+      more.className = "lesson-dot";
+      more.textContent = "+" + (lessonIds.length - showMax) + " more";
+      cell.appendChild(more);
+    }
+
+    calendarGrid.appendChild(cell);
+  }
+}
+
+// YEAR VIEW
+function renderYear(year) {
   yearGrid.innerHTML = "";
+  weekdayRow.style.display = "none";
+  navTitle.textContent = year;
+
+  const schedule = getJSON("schedule");
 
   for (let month = 0; month < 12; month++) {
-    const monthBox = document.createElement("div");
-    monthBox.className = "month-box";
+    const box = document.createElement("div");
+    box.className = "month-box";
 
     const monthName = new Date(year, month).toLocaleString("default", { month: "long" });
-    monthBox.innerHTML = `<h3>${monthName}</h3>`;
+    const h3 = document.createElement("h3");
+    h3.textContent = monthName;
+    h3.onclick = function(e) {
+      e.stopPropagation();
+      currentMonth = month;
+      setView("month");
+    };
+    box.appendChild(h3);
 
-    const miniGrid = document.createElement("div");
-    miniGrid.className = "mini-grid";
+    const mini = document.createElement("div");
+    mini.className = "mini-grid";
 
-    const firstWeekday = new Date(year, month, 1).getDay();
-    const totalDays = new Date(year, month + 1, 0).getDate();
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-    // empty cells
-    for (let i = 0; i < firstWeekday; i++) {
-      miniGrid.appendChild(document.createElement("div"));
+    // blank squares
+    for (let i = 0; i < firstDay; i++) {
+      mini.appendChild(document.createElement("div"));
     }
 
-    // numbered days
-    for (let d = 1; d <= totalDays; d++) {
-      const day = document.createElement("div");
-      day.textContent = d;
-      miniGrid.appendChild(day);
+    // days
+    for (let d = 1; d <= daysInMonth; d++) {
+      const dateStr = makeDateString(year, month, d);
+      const dayCell = document.createElement("div");
+      dayCell.textContent = d;
+
+      if (isToday(year, month, d)) {
+        dayCell.classList.add("mini-today");
+      }
+
+      if ((schedule[dateStr] || []).length > 0) {
+        dayCell.classList.add("has-lessons");
+      }
+
+      dayCell.onclick = function() {
+        window.location.href = "day-view.html?date=" + dateStr;
+      };
+
+      mini.appendChild(dayCell);
     }
 
-    monthBox.appendChild(miniGrid);
-    yearGrid.appendChild(monthBox);
+    box.appendChild(mini);
+    yearGrid.appendChild(box);
   }
 }
 
-// View buttons
-document.getElementById("view-month").onclick = () => {
-  calendarGrid.style.display = "grid";
-  yearGrid.style.display = "none";
-  genCalendar(selYear, selMonth);
-};
+// SWITCH BETWEEN VIEWS
+function setView(view) {
+  activeView = view;
 
-document.getElementById("view-year").onclick = () => {
-  calendarGrid.style.display = "none";
-  yearGrid.style.display = "block";
-  genYear(selYear);
-};
-
-// 6. Month navigation
-document.getElementById("prev").onclick = () => {
-  selMonth--;
-  if (selMonth < 0) {
-    selMonth = 11;
-    selYear--;
+  if (view === "month") {
+    calendarGrid.style.display = "grid";
+    yearGrid.style.display = "none";
+    document.getElementById("view-month").classList.add("active");
+    document.getElementById("view-year").classList.remove("active");
+    renderMonth(currentYear, currentMonth);
+  } else {
+    calendarGrid.style.display = "none";
+    yearGrid.style.display = "grid";
+    document.getElementById("view-month").classList.remove("active");
+    document.getElementById("view-year").classList.add("active");
+    renderYear(currentYear);
   }
-  genCalendar(selYear, selMonth);
+}
+
+// BUTTONS
+document.getElementById("view-month").onclick = function() {
+  setView("month");
 };
 
-document.getElementById("next").onclick = () => {
-  selMonth++;
-  if (selMonth > 11) {
-    selMonth = 0;
-    selYear++;
+document.getElementById("view-year").onclick = function() {
+  setView("year");
+};
+
+document.getElementById("prev").onclick = function() {
+  if (activeView === "month") {
+    currentMonth--;
+    if (currentMonth < 0) {
+      currentMonth = 11;
+      currentYear--;
+    }
+    renderMonth(currentYear, currentMonth);
+  } else {
+    currentYear--;
+    renderYear(currentYear);
   }
-  genCalendar(selYear, selMonth);
 };
 
-// 7. Start on current month
-genCalendar(selYear, selMonth);
+document.getElementById("next").onclick = function() {
+  if (activeView === "month") {
+    currentMonth++;
+    if (currentMonth > 11) {
+      currentMonth = 0;
+      currentYear++;
+    }
+    renderMonth(currentYear, currentMonth);
+  } else {
+    currentYear++;
+    renderYear(currentYear);
+  }
+};
+
+document.getElementById("go-today").onclick = function() {
+  currentYear = today.getFullYear();
+  currentMonth = today.getMonth();
+  setView("month");
+};
+
+// load the first month
+setView("month");

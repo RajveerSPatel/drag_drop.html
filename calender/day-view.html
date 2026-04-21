@@ -3,40 +3,71 @@
 <head>
   <meta charset="UTF-8">
   <title>Day View</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .lesson-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      margin-bottom: 8px;
+    }
+
+    .lesson-item span {
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .picker-btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      background: #fff;
+      cursor: pointer;
+      font-size: 14px;
+      margin-bottom: 8px;
+      text-align: left;
+    }
+
+    .picker-btn:hover {
+      background: #f5f7ff;
+      border-color: #3b5bdb;
+    }
+
+    .picker-btn.added {
+      opacity: 0.45;
+      cursor: default;
+    }
+
+    .picker-btn.added:hover {
+      background: #fff;
+      border-color: #e0e0e0;
+    }
+
+    .picker-tag {
+      font-size: 11px;
+      color: #888;
+    }
+  </style>
 </head>
 <body>
 
-  <h1>Day View</h1>
+  <a class="back-link" href="calendar.html">← Back to calendar</a>
 
-  <div id="periods">
-    <div class="period" data-period="1">
-      <h3>Period 1</h3>
-      <div class="drop-zone"></div>
-    </div>
+  <h1 id="date-title"></h1>
 
-    <div class="period" data-period="2">
-      <h3>Period 2</h3>
-      <div class="drop-zone"></div>
-    </div>
+  <h2>Lessons for this day</h2>
+  <div id="day-lessons"></div>
 
-    <div class="period" data-period="3">
-      <h3>Period 3</h3>
-      <div class="drop-zone"></div>
-    </div>
+  <h2>Add a lesson</h2>
+  <div id="lesson-picker"></div>
 
-    <div class="period" data-period="4">
-      <h3>Period 4</h3>
-      <div class="drop-zone"></div>
-    </div>
-
-    <div class="period" data-period="5">
-      <h3>Period 5</h3>
-      <div class="drop-zone"></div>
-    </div>
-    
-  </div>
-
-  <a href="calendar.html">Back to Calendar</a>
-
+  <script src="day-view.js"></script>
 </body>
 </html>

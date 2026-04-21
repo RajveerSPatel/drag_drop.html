@@ -3,14 +3,167 @@
 <head>
   <meta charset="UTF-8">
   <title>Calendar</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .toolbar {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    nav {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    #nav-title {
+      font-weight: 600;
+      font-size: 18px;
+      min-width: 180px;
+      text-align: center;
+    }
+
+    /* weekday row */
+    #weekday-row {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+      margin-bottom: 4px;
+    }
+
+    #weekday-row div {
+      text-align: center;
+      font-size: 12px;
+      font-weight: 600;
+      color: #888;
+      padding: 4px 0;
+    }
+
+    /* month grid */
+    #calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+    }
+
+    .day-cell {
+      min-height: 64px;
+      padding: 6px;
+      border-radius: 6px;
+      border: 1px solid #e0e0e0;
+      cursor: pointer;
+    }
+
+    .day-cell:hover {
+      background: #f5f7ff;
+    }
+
+    .day-cell.empty {
+      background: #fafafa;
+      cursor: default;
+      border-color: transparent;
+    }
+
+    .day-cell.today {
+      border-color: #3b5bdb;
+      font-weight: 700;
+    }
+
+    .day-cell.today .day-num {
+      background: #3b5bdb;
+      color: #fff;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .day-num {
+      font-size: 13px;
+      margin-bottom: 4px;
+    }
+
+    .lesson-dot {
+      font-size: 11px;
+      color: #3b5bdb;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* year view */
+    #year-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .month-box {
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 10px;
+    }
+
+    .month-box h3 {
+      margin: 0 0 8px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .month-box h3:hover {
+      color: #3b5bdb;
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 2px;
+    }
+
+    .mini-grid div {
+      font-size: 10px;
+      text-align: center;
+      padding: 1px;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+
+    .mini-grid div:hover {
+      background: #e8eeff;
+    }
+
+    .mini-grid div.mini-today {
+      background: #3b5bdb;
+      color: #fff;
+      border-radius: 50%;
+    }
+
+    .mini-grid div.has-lessons::after {
+      content: '·';
+      display: block;
+      color: #3b5bdb;
+      line-height: 0.5;
+    }
+  </style>
 </head>
 <body>
 
-  <h1 id="month-title">Calendar - Month View</h1>
+  <div class="toolbar">
+    <button class="btn active" id="view-month">Month view</button>
+    <button class="btn" id="view-year">Year view</button>
+  </div>
 
-  <button id="view-month">Month View</button>
-  <button id="view-year">Year View</button>
-  
+  <nav>
+    <button class="btn" id="prev">← Prev</button>
+    <span id="nav-title"></span>
+    <button class="btn" id="next">Next →</button>
+    <button class="btn" id="go-today" style="margin-left:8px">Today</button>
+  </nav>
+
   <div id="weekday-row">
     <div>Sun</div>
     <div>Mon</div>
@@ -19,21 +172,16 @@
     <div>Thu</div>
     <div>Fri</div>
     <div>Sat</div>
-</div>
+  </div>
 
-  <!--Month View Grid-->
   <div id="calendar-grid"></div>
-
-  <!--Year View Grid-->
   <div id="year-grid" style="display:none;"></div>
 
-  <button id="prev">Previous Month</button>
-  <button id="next">Next Month</button>
-
-  <a href="lesson-library.html">Lesson Library</a>
-  <a href="day-view.html">Day / Period View</a>
+  <div class="page-links">
+    <a href="lesson-library.html">Lesson library</a>
+    <a href="day-view.html">Day / period view</a>
+  </div>
 
   <script src="calendar.js"></script>
-
 </body>
 </html>

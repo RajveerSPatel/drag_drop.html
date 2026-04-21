@@ -1,31 +1,182 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Lesson Creator</title>
+  <meta charset="UTF-8">
+  <title>Lesson Creator</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    #objectives-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    .objective-row {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .objective-row input {
+      flex: 1;
+    }
+
+    #resources-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    .resource-row {
+      display: flex;
+      gap: 6px;
+    }
+
+    .resource-row input:first-child {
+      flex: 1.5;
+    }
+
+    .resource-row input:last-child {
+      flex: 2;
+    }
+
+    .btn-add-row {
+      background: none;
+      border: 1px dashed #ccc;
+      border-radius: 6px;
+      padding: 6px 12px;
+      cursor: pointer;
+      font-size: 13px;
+      color: #888;
+      width: 100%;
+    }
+
+    .btn-add-row:hover {
+      border-color: #3b5bdb;
+      color: #3b5bdb;
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 24px;
+    }
+  </style>
 </head>
 <body>
 
-    <h1>Create Lesson</h1>
+  <a class="back-link" href="lesson-library.html">← Back to lesson library</a>
 
-    <form id="lesson-form">
-        <div>
-            <label>Lesson Title</label>
-            <input type="text" name="title">
-        </div>
-        
-        <div>
-            <label>Description</label>
-            <textarea name="description"></textarea>
-        </div>
+  <h1 id="page-title">New lesson</h1>
+  <p class="subtitle" id="page-subtitle">Fill in the details below and hit save.</p>
 
-        <div>
-            <label>Attachments</label>
-            <input type="file" name="attachments" multiple>
-        </div>
-        <button type="submit">Save lesson</button>
-    </form>
-    <a href="lesson-library.html">Go to Lesson Library</a>
+  <div class="form-group">
+    <label for="title">Lesson title *</label>
+    <input type="text" id="title" placeholder="e.g. Introduction to fractions">
+    <div class="error-msg" id="title-error" style="display:none">Please enter a title.</div>
+  </div>
 
+  <div class="form-row">
+    <div class="form-group">
+      <label for="subject">Subject</label>
+      <input type="text" id="subject" placeholder="e.g. Maths, Science, English" list="subject-suggestions">
+      <datalist id="subject-suggestions">
+        <option value="Maths">
+        <option value="English">
+        <option value="Science">
+        <option value="History">
+        <option value="Geography">
+        <option value="Art">
+        <option value="PE">
+        <option value="Music">
+        <option value="PDHPE">
+        <option value="HSIE">
+      </datalist>
+    </div>
+    <div class="form-group">
+      <label for="year">Year level</label>
+      <select id="year">
+        <option value="">— select —</option>
+        <option value="K">Kindergarten</option>
+        <option value="1">Year 1</option>
+        <option value="2">Year 2</option>
+        <option value="3">Year 3</option>
+        <option value="4">Year 4</option>
+        <option value="5">Year 5</option>
+        <option value="6">Year 6</option>
+        <option value="7">Year 7</option>
+        <option value="8">Year 8</option>
+        <option value="9">Year 9</option>
+        <option value="10">Year 10</option>
+        <option value="11">Year 11</option>
+        <option value="12">Year 12</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label for="duration">Duration (minutes)</label>
+      <input type="number" id="duration" placeholder="e.g. 60" min="1" max="480">
+    </div>
+    <div class="form-group">
+      <label for="type">Lesson type</label>
+      <select id="type">
+        <option value="">— select —</option>
+        <option value="Direct instruction">Direct instruction</option>
+        <option value="Inquiry">Inquiry</option>
+        <option value="Collaborative">Collaborative</option>
+        <option value="Flipped">Flipped</option>
+        <option value="Project-based">Project-based</option>
+        <option value="Revision">Revision</option>
+        <option value="Assessment">Assessment</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="description">Description</label>
+    <textarea id="description" placeholder="A short summary of what this lesson covers..."></textarea>
+  </div>
+
+  <div class="form-group">
+    <label>Learning objectives</label>
+    <div id="objectives-list"></div>
+    <button class="btn-add-row" onclick="addObjective()">+ Add objective</button>
+    <p class="hint">What should students be able to do by the end?</p>
+  </div>
+
+  <div class="form-group">
+    <label>Resources & materials</label>
+    <div id="resources-list"></div>
+    <button class="btn-add-row" onclick="addResource()">+ Add resource</button>
+    <p class="hint">Worksheets, videos, textbook pages, equipment etc.</p>
+  </div>
+
+  <div class="form-group">
+    <label for="notes">Teacher notes</label>
+    <textarea id="notes" placeholder="Anything extra — differentiation ideas, common misconceptions, timing tips..."></textarea>
+  </div>
+
+  <div class="form-actions">
+    <button class="btn-primary" onclick="saveLesson()">Save lesson</button>
+    <button class="btn-secondary" onclick="window.location.href='lesson-library.html'">Cancel</button>
+  </div>
+
+  <div id="toast">Lesson saved!</div>
+
+  <script src="lesson-creator.js"></script>
 </body>
 </html>
